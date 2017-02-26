@@ -17,6 +17,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions.unitTests.all {
+        testLogging {
+            beforeSuite { suiteDescriptor ->
+                println("Buddybuild Starting Test Suite: " + suiteDescriptor.getName() + "}");
+            }
+
+            beforeTest { testDescriptor ->
+                println("Buddybuild Starting Test: " + testDescriptor.getName());
+            }
+
+            afterTest { testDescriptor, result ->
+                double elapsedTime = (result.getEndTime() - result.getStartTime()) / 1000.0;
+
+                println(String.format("Buddybuild Finished Test: %s [%.3fs] - %s", testDescriptor.getName(), elapsedTime, result.getResultType()));
+            }
+
+            afterSuite { suiteDescriptor, result ->
+                println("Buddybuild Finished Test Suite: " + suiteDescriptor.getName() + "}")
+            }
+        }
+    }
 }
 
 dependencies {
